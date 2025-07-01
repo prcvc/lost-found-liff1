@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>แจ้งของหาย - วิทยาลัยอาชีวศึกษาเชียงราย</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+</head>
+<body>
+  <h2>ระบบแจ้งของหาย - วิทยาลัยอาชีวศึกษาเชียงราย</h2>
+  <p>กำลังส่งข้อมูลผู้ใช้งาน LINE...</p>
+
+  <script>
+    async function main() {
+      await liff.init({ liffId: "2007673805-lWV8P0jr" });
+
+      if (!liff.isLoggedIn()) {
+        liff.login();
+      } else {
+        const profile = await liff.getProfile();
+        const data = {
+          userId: profile.userId,
+          displayName: profile.displayName
+        };
+
+        // ส่งข้อมูลไปยัง Google Apps Script Web App
+        await fetch("https://script.google.com/macros/s/AKfycbzrxKOPmVxgMovY1r_KSUsccMtl7alrTZKeHZST4lKsiaszbw_IAelLHOKvybOsEuIA/exec", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(data)
+        });
+
+        document.body.innerHTML = `
+          <h3>✅ ขอบคุณค่ะ ${profile.displayName}</h3>
+          <p>ระบบของวิทยาลัยอาชีวศึกษาเชียงรายได้รับข้อมูลของคุณแล้ว</p>
+        `;
+      }
+    }
+    main();
+  </script>
+</body>
+</html>
