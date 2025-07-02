@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>แจ้งของหาย</title>
+  <script src="https://static.line-scdn.net/liff/edge/2/sdk.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input, textarea { width: 100%; padding: 10px; margin-top: 8px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; }
+    button { background-color: #06c755; color: white; padding: 10px; border: none; border-radius: 5px; cursor: pointer; }
+    h2 { color: #06c755; }
+  </style>
+</head>
+<body>
+  <h2>แจ้งของหาย</h2>
+  <form id="lostForm">
+    <label>ชื่อ-สกุลผู้แจ้ง</label>
+    <input type="text" name="fullname" required>
+
+    <label>เบอร์โทรติดต่อกลับ</label>
+    <input type="tel" name="phone" required>
+
+    <label>Line ID (สำคัญ)</label>
+    <input type="text" name="lineId" required>
+
+    <label>รายละเอียดของหาย</label>
+    <textarea name="itemDetail" required></textarea>
+
+    <label>วันที่ทำของหาย</label>
+    <input type="date" name="lostDate" required>
+
+    <button type="submit">ส่งข้อมูล</button>
+  </form>
+
+  <script>
+    const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwrdoPE4kCEA5uOxmX1ec37elftqVgCbUsHzx-avNNMi5fwRVnVRD-1PLeHNJdDui8pQA/exec';
+
+    async function init() {
+      await liff.init({ liffId: 'REPLACE_WITH_YOUR_LIFF_ID' });
+      if (!liff.isLoggedIn()) {
+        liff.login();
+      }
+    }
+
+    init();
+
+    document.getElementById("lostForm").addEventListener("submit", function (e) {
+      e.preventDefault();
+      const form = new FormData(this);
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        body: form
+      })
+      .then(() => {
+        alert("ส่งข้อมูลเรียบร้อยแล้ว!");
+        liff.closeWindow();
+      })
+      .catch(error => {
+        alert("เกิดข้อผิดพลาด: " + error);
+      });
+    });
+  </script>
+</body>
+</html>
